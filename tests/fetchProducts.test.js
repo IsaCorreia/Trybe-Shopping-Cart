@@ -20,12 +20,14 @@ describe('1 - Teste a função fetchProducts', () => {
     done();
   })
   it('Verifica se, ao fornecer o argumento "computador" para fetchProducts, retorna uma estrutura de dados igual a do objeto referência', async (done) => {
-    expect(fetchProducts('computador')).toBe(computadorSearch.results);
+    const returns = await fetchProducts('computador')
+    expect(returns).toBe(computadorSearch.results);
     done();
   })
 
-  it('Verifica se ao ser chamada com argumento vazio, retorna mensagem de erro', (done) => {
-    expect(fetchProducts()).toThrow(Error);
+  it('Verifica se ao ser chamada com argumento vazio, retorna mensagem de erro', async (done) => {
+    const expectedError = Error('You need to provide an url');
+    await expect(() => fetchProducts()).toThrow(expectedError);
     done();
   })
   // fail('Teste vazio');

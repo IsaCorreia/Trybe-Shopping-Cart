@@ -1,6 +1,7 @@
 // const fetch = require('node-fetch')
 
 const fetchProducts = (input) => {
+  if (input === undefined) throw new Error('You need to provide an url');
   const url = `https://api.mercadolibre.com/sites/MLB/search?q=${input}`;
   
   try {
@@ -11,12 +12,6 @@ const fetchProducts = (input) => {
     throw new Error(`Erro: ${error}`);
   }
 };
-
-// const toPrint = async () => {
-//   const print =  await fetchProducts('computador');
-//   console.log(print);
-// }
-// toPrint()
 
 if (typeof module !== 'undefined') {
   module.exports = {
