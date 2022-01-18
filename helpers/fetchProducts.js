@@ -1,18 +1,23 @@
 // const fetch = require('node-fetch')
 
-const fetchProducts = async (input) => {
+const fetchProducts = (input) => {
   const url = `https://api.mercadolibre.com/sites/MLB/search?q=${input}`
   
   try {
-    const response = await fetch(url)
+    return fetch(url)
     .then((response) => response.json())
-    return response.results;
+    .then((response) => {
+      const data = response.results;
+      console.log(data);
+      // Chamar todas as funções em script.js que precisam desse dado abaixo:
+      convertIntoItems(data);
+      createItemsList(data);
+    });
   } catch(error) {
-    throw new Error(error)
+    return Error(`Erro: ${error}`);
   }
 };
-
-fetchProducts('computador')
+// fetchProducts('computador')
 
 if (typeof module !== 'undefined') {
   module.exports = {
