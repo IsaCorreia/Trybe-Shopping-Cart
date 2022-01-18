@@ -1,4 +1,7 @@
+// const { fetchProducts } = require("./helpers/fetchProducts");
+
 function createProductImageElement(imageSource) {
+  // Pré-pronta
   const img = document.createElement('img');
   img.className = 'item__image';
   img.src = imageSource;
@@ -6,13 +9,15 @@ function createProductImageElement(imageSource) {
 }
 
 function createCustomElement(element, className, innerText) {
+  // Pré-pronta
   const e = document.createElement(element);
   e.className = className;
   e.innerText = innerText;
   return e;
 }
 
-function createProductItemElement({ sku, name, image }) {
+function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
+  // Pré-pronta
   const section = document.createElement('section');
   section.className = 'item';
 
@@ -25,6 +30,7 @@ function createProductItemElement({ sku, name, image }) {
 }
 
 function getSkuFromProductItem(item) {
+  // Pré-pronta
   return item.querySelector('span.item__sku').innerText;
 }
 
@@ -40,24 +46,20 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-// Recebe UM ÚNICO ITEM e converte para a versão reduzida
-function convertIntoItems(param) {
-    return {
-      sku: param.id,
-      name: param.title,
-      salePrice: param.price,
-      image: param.thumbnail,
-    };
-}
-
-// Recebe um array de objetos (formados pelo convertIntoItems)
-function createItemsList(param) {
-  param.forEach((item) => {
+// Recebe um array de objetos
+async function renderItemsList(param) {
+  // Lógica:
+  //  fetchProducts = objeto com os resultados de pesquisa (results: vários objetos)
+  //  Mandar cada entrada de fetchProducts para createProductItemElement.
+  //  createProductItemElement vai montar a lista de produtos necessária
+  //  por fim, levar os elementos criados para o palco
+  const fetchedProducts = await fetchProducts(param);
+  fetchedProducts.forEach((item) => {
     document.querySelector('.items')
-    .appendChild(createCartItemElement(item));
+    .appendChild(createProductItemElement(item));
   });
 }
 
-// window.onload = () => {
-
-// };
+window.onload = () => {
+  renderItemsList('computador');
+};
