@@ -40,16 +40,14 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-function convertIntoItems(param){
-  return param.map((item) => {
-    let object = {
-      sku: item.id,
-      name: item.title,
-      salePrice: item.price,
-      image: item.thumbnail,
-    }
-    // console.log(object);
-  })
+// Recebe UM ÚNICO ITEM e converte para a versão reduzida
+function convertIntoItems(param) {
+    return {
+      sku: param.id,
+      name: param.title,
+      salePrice: param.price,
+      image: param.thumbnail,
+    };
 }
 
 // Recebe um array de objetos (formados pelo convertIntoItems)
@@ -59,8 +57,6 @@ function createItemsList(param) {
     .appendChild(createCartItemElement(item));
   });
 }
-
-fetchProducts('computador')
 
 // window.onload = () => {
 
