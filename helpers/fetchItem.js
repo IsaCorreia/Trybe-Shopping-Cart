@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+// const fetch = require('node-fetch');
 
 const fetchItem = (input) => {
 if (input === undefined) throw new Error('You need to provide an item ID');

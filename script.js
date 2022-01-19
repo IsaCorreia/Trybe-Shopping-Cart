@@ -25,9 +25,21 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-
+  
   return section;
 }
+
+function getClickFromItemAdd(event) {
+  // Lógica:
+  // Essa função é chamada toda vez que detecta um clique no botão que contenha texto "Adicionar ao carrinho!"
+  // A partir do elemento do botão, recupera o elemento pai => primeiro elemento(SKU) => texto interno (SKU)
+  // Passa esse SKU para a função renderCartITems
+  if ( event.target.innerText === 'Adicionar ao carrinho!') {
+    const targetID = event.target.parentElement.firstChild.innerHTML;
+    renderCartItems(targetID);
+  }
+}
+addEventListener('click', getClickFromItemAdd)
 
 function getSkuFromProductItem(item) {
   // Pré-pronta
@@ -35,10 +47,13 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  // Limpa o item selecionado do carrinho (refinar o clique para somente o "X")
+  // pega o evento do clique, sobe para o elemento pai, remove o filho 'evento'
+  event.target.parentNode.removeChild(event.target);
 }
 
-function createCartItemElement({ sku, name, salePrice }) {
+function createCartItemElement({ id: sku, title: name, price: salePrice }) {
+  // Pré-pronta
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
@@ -58,6 +73,20 @@ async function renderItemsList(param) {
     document.querySelector('.items')
     .appendChild(createProductItemElement(item));
   });
+}
+
+async function renderCartItems(param) {
+  // Lógica:
+  //  Recebe o SKU da função getClickFromItemAdd, passa SKU para fetchItem
+  //  fetchItem retorna objeto com o resultado de pesquisa (um único item)
+  //  Mandar resultado de fetchItem para createCartItemElement.
+  //  createCartItemElement vai fabricar o elemento li
+  //  por fim, leva o elemento criado para o palco
+  const fetchedItems = await fetchItem(param);
+
+  document
+  .querySelector('.cart__items')
+  .appendChild(createCartItemElement(fetchedItems));
 }
 
 window.onload = () => {
