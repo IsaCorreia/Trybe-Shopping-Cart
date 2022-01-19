@@ -29,18 +29,6 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   return section;
 }
 
-function getClickFromItemAdd(event) {
-  // Lógica:
-  // Essa função é chamada toda vez que detecta um clique no botão que contenha texto "Adicionar ao carrinho!"
-  // A partir do elemento do botão, recupera o elemento pai => primeiro elemento(SKU) => texto interno (SKU)
-  // Passa esse SKU para a função renderCartITems
-  if ( event.target.innerText === 'Adicionar ao carrinho!') {
-    const targetID = event.target.parentElement.firstChild.innerHTML;
-    renderCartItems(targetID);
-  }
-}
-addEventListener('click', getClickFromItemAdd)
-
 function getSkuFromProductItem(item) {
   // Pré-pronta
   return item.querySelector('span.item__sku').innerText;
@@ -88,6 +76,18 @@ async function renderCartItems(param) {
   .querySelector('.cart__items')
   .appendChild(createCartItemElement(fetchedItems));
 }
+
+function getClickFromItemAdd(event) {
+  // Lógica:
+  // Essa função é chamada toda vez que detecta um clique no botão que contenha texto "Adicionar ao carrinho!"
+  // A partir do elemento do botão, recupera o elemento pai => primeiro elemento(SKU) => texto interno (SKU)
+  // Passa esse SKU para a função renderCartITems
+  if (event.target.innerText === 'Adicionar ao carrinho!') {
+    const targetID = event.target.parentElement.firstChild.innerHTML;
+    renderCartItems(targetID);
+  }
+}
+document.addEventListener('click', getClickFromItemAdd);
 
 window.onload = () => {
   renderItemsList('computador');
