@@ -39,6 +39,7 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
 // ----------> Criação de elementos para DOM - FIM <----------
 
 // ----------> Renderização de elementos na tela - INÍCIO <----------
+const cartItems = document.querySelector('.cart__items');
 async function renderItemsList(param) {
   //  fetchProducts = objeto com os resultados de pesquisa (results: vários objetos)
   //  Mandar cada entrada de fetchProducts para createProductItemElement.
@@ -58,9 +59,7 @@ async function renderCartItems(param) {
   //  createCartItemElement vai fabricar o elemento li
   //  por fim, leva o elemento criado para o palco
   const fetchedItem = await fetchItem(param);
-  const cartItem = document.querySelector('.cart__items');
-  
-  cartItem.appendChild(createCartItemElement(fetchedItem));
+  cartItems.appendChild(createCartItemElement(fetchedItem));
 }
 // ----------> Renderização de elementos na tela - FIM <----------
 
@@ -70,6 +69,15 @@ function cartItemClickListener(event) {
   // pega o evento do clique, sobe para o elemento pai, remove o filho 'evento'
   if (event.target.className === 'cart__item') {
     event.target.parentNode.removeChild(event.target);
+  }
+}
+
+function clearCart(event) {
+  if (event.target.className === 'empty-cart') {
+    const item = document.querySelector('.cart__item');
+    while (item) {
+      cartItems.firstChild.remove();
+    }
   }
 }
 
@@ -84,14 +92,14 @@ function getClickFromItemAdd(event) {
 }
 
 function saveToCart() {
-  const cartItems = document.querySelector('.cart__items').innerHTML;
   // console.log(`saveToCart: ${JSON.stringify(cartItems)}`);
-  saveCartItems(cartItems);
+  saveCartItems(cartItems.innerHTML);
 }
 
 document.addEventListener('click', saveToCart);
 document.addEventListener('click', cartItemClickListener);
 document.addEventListener('click', getClickFromItemAdd);
+document.addEventListener('click', clearCart);
 setInterval(saveToCart, 200);
 // ----------> Captura de cliques - FIM <----------
 
