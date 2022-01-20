@@ -1,5 +1,5 @@
 const getSavedCartItems = () => {
-  if(localStorage.getItem('cartItems')) {
+  if (localStorage.getItem('cartItems')) {
     const savedItems = localStorage.getItem('cartItems');
     document.querySelector('.cart__items').innerHTML = savedItems;
   }
