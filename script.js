@@ -1,6 +1,7 @@
 const emptyCart = document.querySelector('.empty-cart');
 const cartItems = document.querySelector('.cart__items');
 const items = document.querySelector('.items');
+const totalPrice = document.querySelector('.total-price');
 
 function saveToCart() {
   saveCartItems(cartItems.innerHTML);
@@ -62,15 +63,24 @@ async function renderItemsList(param) {
   });
 }
 
-async function renderCartItems(param) {
+async function renderCartItems(prodId) {
   //  Recebe o SKU da função getClickFromItemAdd, passa SKU para fetchItem
   //  fetchItem retorna objeto com o resultado de pesquisa (um único item)
   //  Mandar resultado de fetchItem para createCartItemElement.
   //  createCartItemElement vai fabricar o elemento li
   //  por fim, leva o elemento criado para o palco
-  const fetchedItem = await fetchItem(param);
+  const fetchedItem = await fetchItem(prodId);
   cartItems.appendChild(createCartItemElement(fetchedItem));
   saveToCart();
+  sumsTotalPrice(fetchedItem.price, true);
+}
+
+const sumsTotalPrice = (price, sum) => {
+  if (sum) {
+  totalPrice.innerText = +totalPrice.innerText + price;
+  } else {
+    totalPrice.innerText = +totalPrice.innerText - price;
+  }
 }
 // ----------> Renderização de elementos na tela - FIM <----------
 
@@ -79,6 +89,9 @@ cartItems.addEventListener('click', (event) => {
   // Limpa o item selecionado do carrinho (refinar o clique para somente o "X")
   // pega o evento do clique, sobe para o elemento pai, remove o filho 'evento'
   if (event.target.className === 'cart__item') {
+    const price = event.target.innerText.split('$')[1];
+    sumsTotalPrice(price, false);
+    // sumTotalPrice(+totalPrice.innerText - event.target.price);
     event.target.remove();
     saveToCart();
   }
