@@ -74,8 +74,8 @@ function cartItemClickListener(event) {
 
 function clearCart(event) {
   if (event.target.className === 'empty-cart') {
-    const item = document.querySelector('.cart__item');
-    while (item) {
+    const item = cartItems.getElementsByTagName('li');
+    while (item.length) {
       cartItems.firstChild.remove();
     }
   }
