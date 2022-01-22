@@ -63,6 +63,14 @@ async function renderItemsList(param) {
   });
 }
 
+const sumsTotalPrice = (price, sum) => {
+  if (sum) {
+  totalPrice.innerText = +totalPrice.innerText + price;
+  } else {
+    totalPrice.innerText = +totalPrice.innerText - price;
+  }
+};
+
 async function renderCartItems(prodId) {
   //  Recebe o SKU da função getClickFromItemAdd, passa SKU para fetchItem
   //  fetchItem retorna objeto com o resultado de pesquisa (um único item)
@@ -73,14 +81,6 @@ async function renderCartItems(prodId) {
   cartItems.appendChild(createCartItemElement(fetchedItem));
   saveToCart();
   sumsTotalPrice(fetchedItem.price, true);
-}
-
-const sumsTotalPrice = (price, sum) => {
-  if (sum) {
-  totalPrice.innerText = +totalPrice.innerText + price;
-  } else {
-    totalPrice.innerText = +totalPrice.innerText - price;
-  }
 }
 // ----------> Renderização de elementos na tela - FIM <----------
 
