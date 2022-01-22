@@ -1,3 +1,8 @@
+const emptyCart = document.querySelector('.empty-cart');
+const cartItems = document.querySelector('.cart__items');
+const items = document.querySelector('.items');
+
+
 // ----------> Criação de elementos para DOM - INÍCIO <----------
 // Funções pré-prontas
 function createProductImageElement(imageSource) {
@@ -39,7 +44,6 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
 // ----------> Criação de elementos para DOM - FIM <----------
 
 // ----------> Renderização de elementos na tela - INÍCIO <----------
-const cartItems = document.querySelector('.cart__items');
 async function renderItemsList(param) {
   //  fetchProducts = objeto com os resultados de pesquisa (results: vários objetos)
   //  Mandar cada entrada de fetchProducts para createProductItemElement.
@@ -60,47 +64,40 @@ async function renderCartItems(param) {
   //  por fim, leva o elemento criado para o palco
   const fetchedItem = await fetchItem(param);
   cartItems.appendChild(createCartItemElement(fetchedItem));
+  saveToCart();
 }
 // ----------> Renderização de elementos na tela - FIM <----------
 
 // ----------> Captura de cliques - INÍCIO <----------
-function cartItemClickListener(event) {
+cartItems.addEventListener('click', (event) => {
   // Limpa o item selecionado do carrinho (refinar o clique para somente o "X")
   // pega o evento do clique, sobe para o elemento pai, remove o filho 'evento'
   if (event.target.className === 'cart__item') {
-    event.target.parentNode.removeChild(event.target);
+    event.target.remove();
+    saveToCart();
   }
-}
+});
 
-function clearCart(event) {
-  if (event.target.className === 'empty-cart') {
-    const item = cartItems.getElementsByTagName('li');
-    while (item.length) {
-      cartItems.firstChild.remove();
-    }
-  }
-}
+emptyCart.addEventListener('click', () => {
+  cartItems.innerHTML = "";
+  saveToCart();
+})
 
-function getClickFromItemAdd(event) {
+items.addEventListener('click', (event) => {
   // Essa função é chamada toda vez que detecta um clique no botão que contenha texto "Adicionar ao carrinho!"
   // A partir do elemento do botão, recupera o elemento pai => primeiro elemento(SKU) => texto interno (SKU)
   // Passa esse SKU para a função renderCartITems
-  if (event.target.innerText === 'Adicionar ao carrinho!') {
-    const targetID = event.target.parentElement.firstChild.innerHTML;
+  if (event.target.className === 'item__add') {
+    const targetID = event.target.parentElement.firstChild.innerHTML; // Ou chamar função getSKU
     renderCartItems(targetID);
   }
-}
+});
 
 function saveToCart() {
-  // console.log(`saveToCart: ${JSON.stringify(cartItems)}`);
+  console.log(cartItems.innerHTML);
   saveCartItems(cartItems.innerHTML);
 }
 
-document.addEventListener('click', saveToCart);
-document.addEventListener('click', cartItemClickListener);
-document.addEventListener('click', getClickFromItemAdd);
-document.addEventListener('click', clearCart);
-setInterval(saveToCart, 200);
 // ----------> Captura de cliques - FIM <----------
 
 window.onload = () => {
