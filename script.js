@@ -2,7 +2,9 @@ const emptyCart = document.querySelector('.empty-cart');
 const cartItems = document.querySelector('.cart__items');
 const items = document.querySelector('.items');
 
-
+function saveToCart() {
+  saveCartItems(cartItems.innerHTML);
+}
 // ----------> Criação de elementos para DOM - INÍCIO <----------
 // Funções pré-prontas
 function createProductImageElement(imageSource) {
@@ -45,11 +47,15 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
 
 // ----------> Renderização de elementos na tela - INÍCIO <----------
 async function renderItemsList(param) {
+  // Carrega o elemento "loading" enquanto busca pelo fetch.
   //  fetchProducts = objeto com os resultados de pesquisa (results: vários objetos)
+  //  Ao receber o fetch, remove o elemento "loading"
   //  Mandar cada entrada de fetchProducts para createProductItemElement.
   //  createProductItemElement vai montar a lista de produtos necessária
   //  por fim, levar os elementos criados para o palco
+  items.appendChild(createCustomElement('p', 'loading', 'Carregando...'));
   const fetchedProducts = await fetchProducts(param);
+  items.querySelector('.loading').remove();
   fetchedProducts.forEach((item) => {
     document.querySelector('.items')
     .appendChild(createProductItemElement(item));
@@ -79,25 +85,19 @@ cartItems.addEventListener('click', (event) => {
 });
 
 emptyCart.addEventListener('click', () => {
-  cartItems.innerHTML = "";
+  cartItems.innerHTML = '';
   saveToCart();
-})
+});
 
 items.addEventListener('click', (event) => {
   // Essa função é chamada toda vez que detecta um clique no botão que contenha texto "Adicionar ao carrinho!"
   // A partir do elemento do botão, recupera o elemento pai => primeiro elemento(SKU) => texto interno (SKU)
   // Passa esse SKU para a função renderCartITems
   if (event.target.className === 'item__add') {
-    const targetID = event.target.parentElement.firstChild.innerHTML; // Ou chamar função getSKU
+    const targetID = getSkuFromProductItem(event.target.parentElement);
     renderCartItems(targetID);
   }
 });
-
-function saveToCart() {
-  console.log(cartItems.innerHTML);
-  saveCartItems(cartItems.innerHTML);
-}
-
 // ----------> Captura de cliques - FIM <----------
 
 window.onload = () => {
