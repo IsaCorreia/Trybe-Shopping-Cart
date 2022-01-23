@@ -115,5 +115,5 @@ items.addEventListener('click', (event) => {
 
 window.onload = () => {
   renderItemsList('computador');
-  getSavedCartItems();
+  document.querySelector('.cart__items').innerHTML = getSavedCartItems();
 };
