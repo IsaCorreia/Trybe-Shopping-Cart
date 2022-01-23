@@ -91,7 +91,6 @@ cartItems.addEventListener('click', (event) => {
   if (event.target.className === 'cart__item') {
     const price = event.target.innerText.split('$')[1];
     sumsTotalPrice(price, false);
-    // sumTotalPrice(+totalPrice.innerText - event.target.price);
     event.target.remove();
     saveToCart();
   }
